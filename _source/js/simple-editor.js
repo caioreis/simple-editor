@@ -93,8 +93,7 @@ Utils = {
 
     var URLObj = window.URL || window.webkitURL;
     var source = URLObj.createObjectURL(file);
-
-    console.log(source);
+    
     if (file.type.match('image.*')) {
 
       var img = document.createElement("img");
