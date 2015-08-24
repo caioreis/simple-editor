@@ -45,7 +45,7 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          '<%= js_build %>/app.min.js': ['<%= js_build %>/app.js'],
+          '<%= js_build %>/app.min.js': ['<%= js_src %>/app.final.js'],
         },
       },
     },
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
       },
       basic_and_extras: {
         files: {
-          '<%= js_build %>/app.js' : ['<%= js_src %>/*.js']
+          '<%= js_src %>/app.final.js' : ['<%= js_src %>/*.js']
         },
       },
     },
