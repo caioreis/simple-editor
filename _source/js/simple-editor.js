@@ -25,6 +25,7 @@ SimpleEditor = {
   init: function () {
     this.registerTriggers();
     this.registerDropZone();
+    this.registerShortcuts();
   },
   registerTriggers: function () {
 
@@ -43,6 +44,38 @@ SimpleEditor = {
     var dropZone = document.getElementById('editor');
     dropZone.addEventListener('dragover', Utils.handleDrag, false);
     dropZone.addEventListener('drop', Utils.handleDrop, false);
+  },
+  registerShortcuts: function () {
+
+    Shortcuts.add('CTRL+B', function () {
+      document.execCommand('bold');
+      SimpleEditor.updateButtons();
+    });
+
+    Shortcuts.add('META+B', function () {
+      document.execCommand('bold');
+      SimpleEditor.updateButtons();
+    });
+
+    Shortcuts.add('META+I', function () {
+      document.execCommand('italic');
+      SimpleEditor.updateButtons();
+    });
+
+    Shortcuts.add('META+U', function () {
+      document.execCommand('underline');
+      SimpleEditor.updateButtons();
+    });
+
+    Shortcuts.add('CTRL+U', function () {
+      document.execCommand('underline');
+      SimpleEditor.updateButtons();
+    });
+    
+    Shortcuts.add('CTRL+I', function () {
+      document.execCommand('italic');
+      SimpleEditor.updateButtons();
+    });
   }
 };
 
