@@ -22,6 +22,10 @@ SimpleEditor = {
       $('[data-action=underline]').removeClass('active');
     }
   },
+  init: function () {
+    this.registerTriggers();
+    this.registerDropZone();
+  },
   registerTriggers: function () {
 
     $('.btn-action').on('click', function (e) {
@@ -34,5 +38,46 @@ SimpleEditor = {
       SimpleEditor.updateButtons();
     });
 
+  },
+  registerDropZone: function () {
+    var dropZone = document.getElementById('editor');
+    dropZone.addEventListener('dragover', Utils.handleDrag, false);
+    dropZone.addEventListener('drop', Utils.handleDrop, false);
   }
 };
+
+Utils = {
+  handleDrag: function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  },
+  handleDrop: function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    x = e.clientX;
+    y = e.clientY;
+    var file = e.dataTransfer.files[0];
+
+    var URLObj = window.URL || window.webkitURL;
+    var source = URLObj.createObjectURL(file);
+
+    console.log(source);
+    if (file.type.match('image.*')) {
+
+      var img = document.createElement("img");
+
+      img.src = source;
+
+      if (document.caretPositionFromPoint) {
+        var pos = document.caretPositionFromPoint(x, y);
+        range = document.createRange();
+        range.setStart(pos.offsetNode, pos.offset);
+        range.collapse();
+        range.insertNode(img);
+      } else if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(x, y);
+        range.insertNode(img);
+      }
+    }
+  }
+}
