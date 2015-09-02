@@ -47,32 +47,17 @@ SimpleEditor = {
   },
   registerShortcuts: function () {
 
-    Shortcuts.add('CTRL+B', function () {
-      document.execCommand('bold');
-      SimpleEditor.updateButtons();
-    });
-
-    Shortcuts.add('META+B', function () {
-      document.execCommand('bold');
-      SimpleEditor.updateButtons();
-    });
-
-    Shortcuts.add('META+I', function () {
-      document.execCommand('italic');
-      SimpleEditor.updateButtons();
-    });
-
-    Shortcuts.add('META+U', function () {
+    Utils.createShortcut('U', function () {
       document.execCommand('underline');
       SimpleEditor.updateButtons();
     });
 
-    Shortcuts.add('CTRL+U', function () {
-      document.execCommand('underline');
+    Utils.createShortcut('B', function () {
+      document.execCommand('bold');
       SimpleEditor.updateButtons();
     });
     
-    Shortcuts.add('CTRL+I', function () {
+    Utils.createShortcut('I', function () {
       document.execCommand('italic');
       SimpleEditor.updateButtons();
     });
@@ -80,6 +65,37 @@ SimpleEditor = {
 };
 
 Utils = {
+  createShortcut: function (bindKey, callback) {
+    var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+
+    bindFunction = function (e) {
+      var character = String.fromCharCode(e.keyCode);
+      var ctrl = (e.ctrlKey) ? true : false;
+      var meta = (e.metaKey) ? true : false;
+      var score = 0;
+
+      if (isMac && meta) {
+        score++;
+      } else if (ctrl) {
+        score++;
+      }
+
+      if (character == bindKey) {
+        score++;
+      }
+
+      if (score == 2) {
+        score = 0;
+        e.stopPropagation();
+        e.preventDefault();
+        return callback();
+      }
+
+    }
+
+    $('body').bind('keydown', bindFunction);
+
+  },
   handleDrag: function(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -94,7 +110,6 @@ Utils = {
     var URLObj = window.URL || window.webkitURL;
     var source = URLObj.createObjectURL(file);
 
-    console.log(source);
     if (file.type.match('image.*')) {
 
       var img = document.createElement("img");
